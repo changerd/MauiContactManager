@@ -1,29 +1,23 @@
-﻿using MauiContactManager.Interfaces;
+﻿using MauiContactManager.Models;
+using MauiContactManager.ViewModels;
 
 namespace MauiContactManager
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-        private readonly IContactDatabase _contactDatabase;
-
-        public MainPage(IContactDatabase contactDatabase)
+        public MainPage(MainViewModel viewModel)
         {
             InitializeComponent();
-            _contactDatabase = contactDatabase;
+
+            BindingContext = viewModel;
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        private async void OnContactSelected(object sender, SelectionChangedEventArgs e)
         {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
+            if (e.CurrentSelection.FirstOrDefault() is ContactModel selectedContact)
+            {
+                await Shell.Current.GoToAsync($"ContactDetailsPage?ContactId={selectedContact.Id}");
+            }
         }
     }
-
 }

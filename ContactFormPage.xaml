@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiContactManager.ContactFormPage"
+             Title="{Binding PageTitle}">
+
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            
+            <Entry Placeholder="Name" Text="{Binding Contact.Name}" />
+            <Entry Placeholder="Phone Numbers (comma separated)" Text="{Binding Contact.PhoneNumbers}" />
+            <Entry Placeholder="Emails (comma separated)" Text="{Binding Contact.Emails}" />
+            <DatePicker Date="{Binding Contact.BirthDate}" />
+            
+            <Button Text="Save" Command="{Binding SaveContactCommand}" />
+            <Button Text="Cancel" Command="{Binding CancelCommand}" />
+            
+            <Button Text="Delete" Command="{Binding DeleteContactCommand}" 
+                    IsVisible="{Binding IsEditMode}" TextColor="Red" />
+        </StackLayout>
+    </ContentPage.Content>
+
+</ContentPage>

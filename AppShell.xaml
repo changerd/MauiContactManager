@@ -7,9 +7,9 @@
     Shell.FlyoutBehavior="Disabled"
     Title="MauiContactManager">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <ShellContent Title="Contacts" ContentTemplate="{DataTemplate local:MainPage}" />
+    <ShellContent Title="Contact Details" Route="ContactDetailsPage" ContentTemplate="{DataTemplate local:ContactDetailsPage}" />
+    <ShellContent Title="Add/Edit Contact" Route="ContactFormPage" ContentTemplate="{DataTemplate local:ContactFormPage}" />
+    <ShellContent Title="Settings" ContentTemplate="{DataTemplate local:SettingsPage}" />
 
 </Shell>
