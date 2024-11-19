@@ -1,4 +1,5 @@
-﻿using MauiContactManager.Models;
+﻿using MauiContactManager.Interfaces;
+using MauiContactManager.Models;
 using MauiContactManager.ViewModels;
 
 namespace MauiContactManager
@@ -9,14 +10,29 @@ namespace MauiContactManager
         {
             InitializeComponent();
 
-            BindingContext = viewModel;
+            BindingContext = viewModel;            
         }
 
-        private async void OnContactSelected(object sender, SelectionChangedEventArgs e)
+        private async void OnContactSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var selectedContact = e.CurrentSelection.FirstOrDefault() as ContactModel;
+        if (selectedContact != null)
         {
-            if (e.CurrentSelection.FirstOrDefault() is ContactModel selectedContact)
+            // Вызываем команду из ViewModel
+            var viewModel = BindingContext as MainViewModel;
+            if (viewModel != null)
             {
-                await Shell.Current.GoToAsync($"ContactDetailsPage?ContactId={selectedContact.Id}");
+                await viewModel.OnContactSelected(selectedContact);
+            }
+        }
+    }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            if (BindingContext is MainViewModel viewModel)
+            {
+                viewModel.LoadContacts();
             }
         }
     }

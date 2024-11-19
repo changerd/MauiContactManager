@@ -9,6 +9,7 @@ namespace MauiContactManager.ViewModels
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly IContactDatabase _contactDatabase;
+        private readonly INavigationService _navigationService;
         private string _searchQuery;
         private bool _isContactsEmpty;
 
@@ -18,6 +19,7 @@ namespace MauiContactManager.ViewModels
         public ICommand AddContactCommand { get; }
         public ICommand LoadContactsCommand { get; }
         public ICommand ContactSelectedCommand { get; }
+        public ICommand GoToSettingsCommand { get; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -42,18 +44,20 @@ namespace MauiContactManager.ViewModels
             }
         }
 
-        public MainViewModel(IContactDatabase contactDatabase)
+        public MainViewModel(IContactDatabase contactDatabase, INavigationService navigationService)
         {
             _contactDatabase = contactDatabase;
+            _navigationService = navigationService;
             Contacts = new ObservableCollection<ContactModel>(_contactDatabase.GetContacts());
             FilteredContacts = new ObservableCollection<ContactModel>(Contacts);
 
-            AddContactCommand = new Command(AddContact);
+            AddContactCommand = new Command(async () => await AddContact());
             LoadContactsCommand = new Command(LoadContacts);
-            ContactSelectedCommand = new Command<ContactModel>(OnContactSelected);
+            ContactSelectedCommand = new Command<ContactModel>(async (selectedContact) => await OnContactSelected(selectedContact));
+            GoToSettingsCommand = new Command(async () => await GoToSettings());
         }
 
-        private void LoadContacts()
+        public void LoadContacts()
         {
             Contacts.Clear();
             foreach (var contact in _contactDatabase.GetContacts())
@@ -80,17 +84,32 @@ namespace MauiContactManager.ViewModels
             OnPropertyChanged(nameof(FilteredContacts));
         }
 
-        private async void AddContact()
+        private async Task AddContact()
         {
-            await Shell.Current.GoToAsync($"///{nameof(ContactFormPage)}?Mode=Add");
+            var parameters = new Dictionary<string, object>
+            {
+                { "Mode", "Add" }
+            };
+            
+            await _navigationService.NavigateToAsync<ContactFormPage>(parameters);
         }
 
-        private async void OnContactSelected(ContactModel selectedContact)
+        public async Task OnContactSelected(ContactModel selectedContact)
         {
             if (selectedContact != null)
             {
-                await Shell.Current.GoToAsync($"ContactDetailsPage?ContactId={selectedContact.Id}");
+                var parameters = new Dictionary<string, object>
+                {
+                    { "ContactId", selectedContact.Id }
+                };
+
+                await _navigationService.NavigateToAsync<ContactDetailsPage>(parameters);
             }
+        }
+
+        private async Task GoToSettings()
+        {
+            await _navigationService.NavigateToAsync<SettingsPage>();
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

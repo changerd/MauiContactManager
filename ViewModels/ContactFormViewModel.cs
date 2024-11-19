@@ -5,9 +5,10 @@ using System.Windows.Input;
 
 namespace MauiContactManager.ViewModels
 {
-    public class ContactFormViewModel
+    public class ContactFormViewModel : IParameterizedViewModel, INotifyPropertyChanged
     {
         private readonly IContactDatabase _contactDatabase;
+        private readonly INavigationService _navigationService;
         private bool _isEditMode;
         private int _contactId;
 
@@ -33,6 +34,7 @@ namespace MauiContactManager.ViewModels
                 if (_isEditMode && _contactId > 0)
                 {
                     Contact = _contactDatabase.GetContact(_contactId);
+                    OnPropertyChanged(nameof(Contact));
                 }
                 OnPropertyChanged(nameof(ContactId));
             }
@@ -48,9 +50,10 @@ namespace MauiContactManager.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ContactFormViewModel(IContactDatabase contactDatabase)
+        public ContactFormViewModel(IContactDatabase contactDatabase, INavigationService navigationService)
         {
             _contactDatabase = contactDatabase;
+            _navigationService = navigationService;
 
             Contact = new ContactModel();
 
@@ -59,15 +62,28 @@ namespace MauiContactManager.ViewModels
             DeleteContactCommand = new Command(DeleteContact);
         }
 
+        public void ApplyParameters(Dictionary<string, object> parameters)
+        {
+            if (parameters.ContainsKey("Mode"))
+            {
+                Mode = parameters["Mode"] as string;
+            }
+
+            if (parameters.ContainsKey("ContactId") && parameters["ContactId"] is int contactId)
+            {
+                ContactId = contactId;
+            }
+        }
+
         private async void SaveContact()
         {
             _contactDatabase.SaveContact(Contact);
-            await Shell.Current.GoToAsync("..");
+            await _navigationService.GoBackAsync();
         }
 
         private async void Cancel()
         {
-            await Shell.Current.GoToAsync("..");
+            await _navigationService.GoBackAsync();
         }
 
         private async void DeleteContact()
@@ -76,7 +92,7 @@ namespace MauiContactManager.ViewModels
             {
                 _contactDatabase.DeleteContact(_contactId);
             }
-            await Shell.Current.GoToAsync("..");
+            await _navigationService.GoBackAsync();
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

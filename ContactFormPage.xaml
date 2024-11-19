@@ -17,6 +17,7 @@
             
             <Button Text="Delete" Command="{Binding DeleteContactCommand}" 
                     IsVisible="{Binding IsEditMode}" TextColor="Red" />
+            
         </StackLayout>
     </ContentPage.Content>
 

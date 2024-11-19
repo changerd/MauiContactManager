@@ -6,38 +6,38 @@
              Title="Contacts">
 
     <ContentPage.Content>
-        <StackLayout Padding="10">
-            
-            <Label Text="Contacts" FontSize="24" HorizontalOptions="Center" />
+        <ScrollView Orientation="Vertical">
+            <StackLayout Padding="10">
 
-            <SearchBar Placeholder="Search contacts" Text="{Binding SearchQuery}" />
+                <SearchBar Placeholder="Search contacts" Text="{Binding SearchQuery}" />
 
-            <Label Text="No contacts found."
-                   IsVisible="{Binding IsContactsEmpty}"
-                   HorizontalOptions="Center"
-                   VerticalOptions="CenterAndExpand"
-                   FontSize="18"
-                   TextColor="Gray" />
+                <Label Text="No contacts found."
+                       IsVisible="{Binding IsContactsEmpty}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="CenterAndExpand"
+                       FontSize="18"
+                       TextColor="Gray" />
 
-            <CollectionView ItemsSource="{Binding Contacts}"
-                            SelectionMode="Single"
-                            SelectedItem="{Binding SelectedContact}">
-                
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Padding="10">
-                            <Label Text="{Binding Name}" FontSize="18" />
-                            
-                            <Label Text="{Binding FormattedPhoneNumbers}" FontSize="14" TextColor="Gray">
-                                
-                            </Label>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
 
-            <Button Text="Add Contact" Command="{Binding AddContactCommand}" />
-        </StackLayout>
+                <CollectionView ItemsSource="{Binding FilteredContacts}"
+                                SelectionMode="Single"
+                                SelectionChanged="OnContactSelectionChanged">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="10">
+                                <Label Text="{Binding Name}" FontSize="18" />
+                                <Label Text="{Binding PhoneNumbers}" FontSize="14" TextColor="Gray"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+
+                <Button Text="Add Contact" Command="{Binding AddContactCommand}" />
+                <Button Text="Go to Settings" Command="{Binding GoToSettingsCommand}" />
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 
 </ContentPage>

@@ -1,5 +1,6 @@
 ﻿using MauiContactManager.Data;
 using MauiContactManager.Interfaces;
+using MauiContactManager.Services;
 using MauiContactManager.ViewModels;
 using Microsoft.Extensions.Logging;
 using SQLitePCL;
@@ -28,10 +29,12 @@ namespace MauiContactManager
             var dbPath = Path.Combine(FileSystem.AppDataDirectory, "contacts.db");
             builder.Services.AddSingleton<IContactDatabase, ContactDatabase>(sp => new ContactDatabase(dbPath));
 
+            builder.Services.AddSingleton<INavigationService, NavigationService>();
+
             builder.Services.AddTransient<MainViewModel>();
             builder.Services.AddTransient<ContactFormViewModel>();
             builder.Services.AddTransient<SettingsViewModel>();
-            builder.Services.AddTransient<ContactDetailsViewModel>();
+            builder.Services.AddTransient<ContactDetailsViewModel>();            
 
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<ContactFormPage>();
