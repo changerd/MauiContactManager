@@ -17,7 +17,7 @@ namespace MauiContactManager.Data
 
         private void InitializeDatabase()
         {
-            string sql = @"
+            string createContactsTableSql = @"
                 CREATE TABLE IF NOT EXISTS Contact (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     Name TEXT NOT NULL,
@@ -27,9 +27,17 @@ namespace MauiContactManager.Data
                 )
             ";
 
+            string createSettingsTableSql = @"
+                CREATE TABLE IF NOT EXISTS Settings (
+                    Key TEXT PRIMARY KEY,
+                    Value TEXT
+                )
+            ";
+
             using var conncetion = GetConnection();
             conncetion.Open();
-            conncetion.Execute(sql);
+            conncetion.Execute(createContactsTableSql);
+            conncetion.Execute(createSettingsTableSql);
         }
 
         public List<ContactModel> GetContacts()
@@ -66,6 +74,20 @@ namespace MauiContactManager.Data
         {
             var connection = GetConnection();
             connection.Execute("DELETE FROM Contact WHERE Id = @Id", new { Id = id });
+        }
+
+        public string GetSetting(string key)
+        {
+            string sql = "SELECT Value FROM Settings WHERE Key = @Key";
+            using var connection = GetConnection();
+            return connection.QueryFirstOrDefault<string>(sql, new { Key = key });
+        }
+
+        public void SaveSetting(string key, string value)
+        {
+            string sql = @"INSERT INTO Settings (Key, Value) VALUES (@Key, @Value) ON CONFLICT(Key) DO UPDATE SET Value = @Value";
+            using var connection = GetConnection();
+            connection.Execute(sql, new { Key = key, Value = value });
         }
 
         private SqliteConnection GetConnection()

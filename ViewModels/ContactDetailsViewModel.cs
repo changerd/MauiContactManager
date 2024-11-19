@@ -12,7 +12,7 @@ namespace MauiContactManager.ViewModels
         private int _contactId;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         public ICommand EditContactCommand { get; }
         public ICommand DeleteContactCommand { get; }
 
@@ -43,7 +43,7 @@ namespace MauiContactManager.ViewModels
 
         public string FormattedPhoneNumbers => string.Join(", ", Contact?.PhoneNumbers?.Split(',') ?? new string[0]);
         public string FormattedEmails => string.Join(", ", Contact?.Emails?.Split(',') ?? new string[0]);
-        public string FormattedBirthDate => Contact != null && Contact.BirthDate.HasValue ? Contact.BirthDate.Value.ToString("MMMM dd, yyyy") : "N/A";
+        public string FormattedBirthDate => Contact != null && Contact.BirthDate.HasValue ? Contact.BirthDate.Value.ToString("dd.MM.yyyy") : "N/A";
 
         public ContactDetailsViewModel(IContactDatabase contactDatabase, INavigationService navigationService)
         {
@@ -51,7 +51,7 @@ namespace MauiContactManager.ViewModels
             _navigationService = navigationService;
 
             EditContactCommand = new Command(EditContact);
-            DeleteContactCommand = new Command(DeleteContact);            
+            DeleteContactCommand = new Command(DeleteContact);
         }
 
         public void ApplyParameters(Dictionary<string, object> parameters)
@@ -71,13 +71,13 @@ namespace MauiContactManager.ViewModels
         }
 
         private void Initialize(int contactId)
-        {            
+        {
             Contact = _contactDatabase.GetContact(contactId);
-            
+
             if (Contact == null)
-            {                
+            {
                 Contact = new ContactModel { Name = "Unknown", PhoneNumbers = "N/A", Emails = "N/A", BirthDate = null };
-            }            
+            }
         }
 
         private async void EditContact()

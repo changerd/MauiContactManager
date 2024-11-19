@@ -1,17 +1,29 @@
-﻿using System.Windows.Input;
+﻿using MauiContactManager.Interfaces;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace MauiContactManager.ViewModels
 {
-    public class SettingsViewModel
+    public class SettingsViewModel : INotifyPropertyChanged
     {
-        public List<string> AvailableThemes { get; } = new List<string> { "Light", "Dark", "System" };
+        private readonly IContactDatabase _contactDatabase;
+        private string _selectedTheme;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public string SelectedTheme
         {
-            get => Preferences.Get("AppTheme", "System");
+            get => _selectedTheme;
             set
             {
-                Preferences.Set("AppTheme", value);
-                ApplyTheme(value);
+                if (_selectedTheme != value)
+                {
+                    _selectedTheme = value;
+                    _contactDatabase.SaveSetting("AppTheme", value);
+                    ApplyTheme(value);
+                    OnPropertyChanged(nameof(SelectedTheme));
+                }
             }
         }
 
@@ -24,8 +36,14 @@ namespace MauiContactManager.ViewModels
         public ICommand ExportContactsCommand { get; }
         public ICommand ImportContactsCommand { get; }
 
-        public SettingsViewModel()
+        public SettingsViewModel(IContactDatabase contactDatabase)
         {
+            _contactDatabase = contactDatabase;
+
+            // Инициализация темы
+            _selectedTheme = _contactDatabase.GetSetting("AppTheme") ?? "System";
+            ApplyTheme(_selectedTheme);
+
             ExportContactsCommand = new Command(ExportContacts);
             ImportContactsCommand = new Command(ImportContacts);
         }
@@ -40,14 +58,19 @@ namespace MauiContactManager.ViewModels
             };
         }
 
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private void ExportContacts()
         {
-            //Todo
+            // Todo
         }
 
         private void ImportContacts()
         {
-            //Todo
+            // Todo
         }
     }
 }

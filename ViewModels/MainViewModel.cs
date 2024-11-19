@@ -21,6 +21,7 @@ namespace MauiContactManager.ViewModels
         public ICommand ContactSelectedCommand { get; }
         public ICommand GoToSettingsCommand { get; }
 
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public string SearchQuery
@@ -80,6 +81,8 @@ namespace MauiContactManager.ViewModels
                 );
             }
 
+            FilteredContacts = new ObservableCollection<ContactModel>(FilteredContacts.OrderBy(item => item.Name));
+
             IsContactsEmpty = FilteredContacts == null || !FilteredContacts.Any();
             OnPropertyChanged(nameof(FilteredContacts));
         }
@@ -90,7 +93,7 @@ namespace MauiContactManager.ViewModels
             {
                 { "Mode", "Add" }
             };
-            
+
             await _navigationService.NavigateToAsync<ContactFormPage>(parameters);
         }
 

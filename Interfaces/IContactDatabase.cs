@@ -8,6 +8,7 @@ namespace MauiContactManager.Interfaces
         ContactModel GetContact(int id);
         void SaveContact(ContactModel contact);
         void DeleteContact(int id);
-
+        string GetSetting(string key);
+        void SaveSetting(string key, string value);
     }
 }

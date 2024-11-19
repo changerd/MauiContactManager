@@ -6,18 +6,22 @@
 
     <ContentPage.Content>
         <StackLayout Padding="10">
-            
+
             <Entry Placeholder="Name" Text="{Binding Contact.Name}" />
-            <Entry Placeholder="Phone Numbers (comma separated)" Text="{Binding Contact.PhoneNumbers}" />
-            <Entry Placeholder="Emails (comma separated)" Text="{Binding Contact.Emails}" />
+
+            <Entry Placeholder="Phone Number" Text="{Binding Contact.PhoneNumbers}" />
+            <Label Text="{Binding PhoneValidationError}" TextColor="Red" IsVisible="{Binding PhoneValidationError}" />
+
+            <Entry Placeholder="Email" Text="{Binding Contact.Emails}" />
+            <Label Text="{Binding EmailValidationError}" TextColor="Red" IsVisible="{Binding EmailValidationError}" />
+
             <DatePicker Date="{Binding Contact.BirthDate}" />
-            
-            <Button Text="Save" Command="{Binding SaveContactCommand}" />
-            <Button Text="Cancel" Command="{Binding CancelCommand}" />
-            
+
+            <Button Text="Save" Command="{Binding SaveContactCommand}" Margin="150, 20, 150, 10" />
+            <Button Text="Cancel" Command="{Binding CancelCommand}" Margin="150, 20, 150, 10" />
             <Button Text="Delete" Command="{Binding DeleteContactCommand}" 
-                    IsVisible="{Binding IsEditMode}" TextColor="Red" />
-            
+                    IsVisible="{Binding IsEditMode}" TextColor="Red" Margin="150, 20, 150, 10" />
+
         </StackLayout>
     </ContentPage.Content>
 

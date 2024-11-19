@@ -15,19 +15,18 @@ namespace MauiContactManager.Services
         {
             var page = _serviceProvider.GetService<TPage>();
 
-            if(page != null)
+            if (page != null)
             {
                 if (page.BindingContext is IParameterizedViewModel viewModel && parameters != null)
                 {
                     viewModel.ApplyParameters(parameters);
                 }
 
-                // Используем Navigation для перехода
                 if (Application.Current.MainPage is NavigationPage navigationPage)
                 {
                     await navigationPage.PushAsync(page);
                 }
-            }            
+            }
         }
 
         public async Task GoBackAsync()

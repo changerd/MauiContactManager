@@ -1,5 +1,4 @@
-﻿using MauiContactManager.Interfaces;
-using MauiContactManager.Models;
+﻿using MauiContactManager.Models;
 using MauiContactManager.ViewModels;
 
 namespace MauiContactManager
@@ -17,8 +16,7 @@ namespace MauiContactManager
     {
         var selectedContact = e.CurrentSelection.FirstOrDefault() as ContactModel;
         if (selectedContact != null)
-        {
-            // Вызываем команду из ViewModel
+        {            
             var viewModel = BindingContext as MainViewModel;
             if (viewModel != null)
             {

@@ -34,7 +34,7 @@ namespace MauiContactManager
             builder.Services.AddTransient<MainViewModel>();
             builder.Services.AddTransient<ContactFormViewModel>();
             builder.Services.AddTransient<SettingsViewModel>();
-            builder.Services.AddTransient<ContactDetailsViewModel>();            
+            builder.Services.AddTransient<ContactDetailsViewModel>();
 
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<ContactFormPage>();

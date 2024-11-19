@@ -9,6 +9,11 @@
         <ScrollView Orientation="Vertical">
             <StackLayout Padding="10">
 
+                <StackLayout Orientation="Horizontal" Margin="0,0,0,20" HorizontalOptions="StartAndExpand">
+                    <Button Text="Add Contact" Command="{Binding AddContactCommand}" Margin="0, 0, 10, 0" />
+                    <Button Text="Go to Settings" Command="{Binding GoToSettingsCommand}" />
+                </StackLayout>
+
                 <SearchBar Placeholder="Search contacts" Text="{Binding SearchQuery}" />
 
                 <Label Text="No contacts found."
@@ -16,8 +21,8 @@
                        HorizontalOptions="Center"
                        VerticalOptions="CenterAndExpand"
                        FontSize="18"
-                       TextColor="Gray" />
-
+                       TextColor="Gray" 
+                />
 
                 <CollectionView ItemsSource="{Binding FilteredContacts}"
                                 SelectionMode="Single"
@@ -31,11 +36,7 @@
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
-                </CollectionView>
-
-
-                <Button Text="Add Contact" Command="{Binding AddContactCommand}" />
-                <Button Text="Go to Settings" Command="{Binding GoToSettingsCommand}" />
+                </CollectionView>                
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
